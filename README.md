@@ -11,4 +11,3 @@ https://gsca-cpca.github.io/Jeju-Mixed-Reality/home.html
 ## QR Code for Augmented Reality
 ![alt text](https://raw.githubusercontent.com/Alex-Nguyen/jeju/master/assets/images/JEJUARQRCODE.PNG)
 
-
