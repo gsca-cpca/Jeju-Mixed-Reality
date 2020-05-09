@@ -9,5 +9,5 @@ https://gsca-cpca.github.io/Jeju-Mixed-Reality/Gwandeokjeong_ar.html
 https://gsca-cpca.github.io/Jeju-Mixed-Reality/home.html
 
 ## QR Code for Augmented Reality
-![alt text](https://raw.githubusercontent.com/Alex-Nguyen/jeju/master/assets/images/JEJUARQRCODE.PNG)
+![alt text](https://github.com/gsca-cpca/Jeju-Mixed-Reality/blob/master/assets/images/JEJUARQRCODE.PNG?raw=true)
 
