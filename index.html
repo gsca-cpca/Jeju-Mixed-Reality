@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset='utf-8'/>
+    <title>Welcome to Jeju Island</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no'/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src='js/mapbox-gl.js'></script>
+    <script src='js/three.min.js'></script>
+    <script src="js/GLTFLoader.js"></script>
+    <link href='assets/css/mapbox-gl.css' rel='stylesheet'/>
+    <link href='https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
+    <link rel="stylesheet" href="assets/css/main.min.css"/>
+    <link rel="stylesheet" href="assets/css/markers.css"/>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            z-index: -2;
+        }
+
+        .jsgif {
+            width: 200px !important;
+            margin-left: 0;
+            margin-bottom: 0;
+            height: 240px !important;
+        }
+
+        canvas.superGifCanvas {
+            width: 200px;
+            margin-left: 0;
+            margin-bottom: 0;
+            height: 240px;
+        }
+    </style>
+</head>
+<body>
+<div id="dialog-message" title="Application configuration">
+    <div class="form-group">
+        <div class="form-row" id="exampleInputEmail1">
+            <div class="col-7">
+                <label for="map_style">Map view</label>
+                <input type="text" id="map_style" class="form-control" placeholder="mapbox://styles/mapbox/streets-v11">
+            </div>
+            <div class="col">
+                <label for="map_lat">Latitude</label>
+                <input type="text" id="map_lat" class="form-control" placeholder="33.37">
+            </div>
+            <div class="col">
+                <label for="map_long">Longitude</label>
+                <input type="text" id="map_long" class="form-control" placeholder="126.53">
+            </div>
+            <div class="col">
+                <label for="map_zoom">Map zoom</label>
+                <input type="text" id="map_zoom" class="form-control" placeholder="10">
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Gwandeokjeong info</span>
+        </div>
+        <textarea class="form-control" aria-label="Gwandeokjeong">Here is one of the oldest standing architectures on Jeju Island. Gwandeokjeong Pavilion was built by Pastor Sin Suk-Cheong in the thirtieth year of King Sejong's reign (1448) as a training ground. For its historic contribution to strengthening the mind and soul of soldiers, Gwangdeokjeong was designated as National Treasure in 1963. Today, the pavilion serves as a model of excellence in soldier training
+        </textarea>
+    </div>
+    <div class="input-group pt-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Harubang info</span>
+        </div>
+        <textarea class="form-control" aria-label="harubang">I am also called tol harubang, or harubang. I am a large rock statue found on Jeju Island off the southern tip of South Korea. I am usually considered to be a god offering both protection and fertility, and placed outside of gates for protection against demons travelling between realities. I have become the symbol of Jeju Island, and replicas of various sizes are sold as tourist souvenirs. Now, let me take you to a great tourist spots of Jeju Island
+        </textarea>
+    </div>
+
+    <div class="input-group pt-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Bijarim Forest info</span>
+        </div>
+        <textarea class="form-control" aria-label="Bijarim">Bijarim Forest is an ideal spot for a relaxing forest retreat. The dense forest is home to hundreds of bija (nutmeg yew) trees, and is the largest forest in the world to be made up of one plant species.
+Most of the trees in the forest have lived for 500 to 700 years, earning the forest the nickname “Forest of a Thousand Years.” A must-see sight while at Bijarim Forest is none other than the 800-year old, conjoined nutmeg yews.
+        </textarea>
+    </div>
+    <div class="input-group pt-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Jeju Folk Village info</span>
+        </div>
+        <textarea class="form-control" aria-label="Village">The Jeju Folk Village is the island’s main tourist attraction where customs of the old days can be explored. At Jeju Folk Village the unique lifestyle and traditional culture of Jeju Island are presented as they appeared during the 19th century. A mountain village, fishing village, botanical garden, market place, an old government building and authentic shamanistic rites one recreated on this 4500-hectare site in Pyoseon-ri
+        </textarea>
+    </div>
+
+</div>
+<div id="avatar" class="fixed-bottom ml-0" style="width: 300px">
+    <div id="imagecontainer" data-toggle="popover">
+        <img id="exampleimg" src="https://i.imgur.com/ork8hoP.gif" rel:animated_src="https://i.imgur.com/ork8hoP.gif"
+             rel:auto_play="0"/>
+    </div>
+</div>
+<div class="fixed-bottom mb-4">
+    <div style="display: none" class="text-center pl-5 pr-5 bg-info message">
+        <h4><span id="message"></span></h4>
+    </div>
+</div>
+
+
+<ul class="nav navbar-nav navbar-expand-sm fixed-top mt-3 ml-3 icon-top" style="width: 300px">
+    <li id="btnHome" class="nav-item px-2">
+        <i class="fas fa-home fa-2x"></i>
+    </li>
+
+    <li id="map-marked" class="nav-item  px-2 active">
+        <i class="fas fa-map-marked fa-2x"></i>
+    </li>
+    <li id="land-marked" class="nav-item  px-2 active">
+        <i class="fas fa-landmark fa-2x"></i>
+    </li>
+    <li id="model3d" class="nav-item px-2 active">
+        <i class="fas fa-cubes fa-2x"></i>
+    </li>
+
+</ul>
+<div style="position: absolute;margin-top:20px ; right:20px;z-index: 10">
+    <div>
+        <i class="fas fa-cogs fa-2x" id="iconfig"></i>
+    </div>
+
+</div>
+
+<div id="map"></div>
+</body>
+<script src="js/libgif.js"></script>
+<script src="js/sketch.js"></script>
+</html>

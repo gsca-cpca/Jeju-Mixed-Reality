@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Play map locations as a slideshow</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.4.0/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin:0; padding:0; }
+        #map { position:absolute; top:0; bottom:0; width:100%; }
+    </style>
+</head>
+<body>
+
+<style>
+    .map-overlay-container {
+        position: absolute;
+        width: 25%;
+        top: 0;
+        left: 0;
+        padding: 10px;
+        z-index: 1;
+    }
+
+    .map-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #fff;
+        border-radius: 3px;
+        padding: 10px;
+        box-shadow:0 1px 2px rgba(0,0,0,0.20);
+    }
+
+    .map-overlay h2,
+    .map-overlay p {
+        margin: 0 0 10px;
+    }
+</style>
+
+<div id='map'></div>
+
+<div class='map-overlay-container'>
+    <div class='map-overlay'>
+        <h2 id='location-title'></h2>
+        <p id='location-description'></p>
+        <small>Text credit: <a target='_blank' href='http://www.nycgo.com/neighborhoods'>nycgo.com</a></small>
+    </div>
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoidmluaG50IiwiYSI6ImNqb2VqdXZvaDE4cnkzcG80dXkxZzlhNWcifQ.G6sZ1ukp_DhiSmCvgKblVQ';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [126.53, 33.37],
+        maxZoom: 16,
+        minZoom: 9,
+        zoom: 9.68
+    });
+
+    var title = document.getElementById('location-title');
+    var description = document.getElementById('location-description');
+
+    var locations = [{
+        "id": "2",
+        "title": "Gasi-ro",
+        "description": "Dol hareubangs, also called tol harubangs, hareubangs, or harubangs, are large rock statues found on Jeju Island off the southern tip of South Korea. They are considered to be gods offering both protection and fertility and were placed outside of gates for protection against demons travelling between realities",
+        "camera": {
+            center: [126.788422, 33.345127],
+            zoom: 12.21,
+            pitch: 50
+        }
+    }, {
+        "id": "3",
+        "title": "Songak Mountain",
+        "description": "Mt. Songak is a simple volcano on Jeju Island which has double craters and a parasitic volcano. Crater 1 is about 500 m in diameter, 1.7 km in circumference. Crater 2, the mouth of the volcano in Crater 1, is about 400 m in diameter, 69 m in depth and leans vertically.",
+        "camera": {
+            center: [126.310454, 33.231492],
+            bearing: -8.9,
+            zoom: 11.68
+        }
+    }, {
+        "id": "1",
+        "title": "Manjanggul Cave",
+        "description": "Even if you think you know Manhattan—its world-class museums, fine dining and unforgettable views—the borough always has something new and exciting in store.",
+        "camera": {
+            center: [126.771460, 33.528892],
+            bearing: 25.3,
+            zoom: 11.5
+        }
+    }];
+
+    function highlightBorough(code) {
+// Only show the polygon feature that cooresponds to `borocode` in the data
+        map.setFilter('highlight', ["==", "borocode", code]);
+    }
+
+    function playback(index) {
+        title.textContent = locations[index].title;
+        description.textContent = locations[index].description;
+
+        highlightBorough(locations[index].id ? locations[index].id : '');
+
+// Animate the map position based on camera properties
+        map.flyTo(locations[index].camera);
+
+        map.once('moveend', function() {
+// Duration the slide is on screen after interaction
+            window.setTimeout(function() {
+// Increment index
+                index = (index + 1 === locations.length) ? 0 : index + 1;
+                playback(index);
+            }, 3000); // After callback, show the location for 3 seconds.
+        });
+    }
+
+    // Display the last title/description first
+    title.textContent = locations[locations.length - 1].title;
+    description.textContent = locations[locations.length - 1].description;
+
+    map.on('load', function() {
+
+        map.addLayer({
+            "id": "highlight",
+            "type": "fill",
+            "source": {
+                "type": "vector",
+                "url": "mapbox://mapbox.8ibmsn6u"
+            },
+            "source-layer": "original",
+            "paint": {
+                "fill-color": "#fd6b50",
+                "fill-opacity": 0.25
+            },
+            "filter": ["==", "borocode", ""]
+        }, 'settlement-subdivision-label'); // Place polygon under the neighborhood labels.
+
+// Start the playback animation for each borough
+        playback(0);
+    });
+</script>
+
+</body>
+</html>

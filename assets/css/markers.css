@@ -1,0 +1,45 @@
+.img-thumbnail {
+    background-size: cover;
+    border-radius: 10%;
+    cursor: pointer;
+}
+.mapboxgl-popup {
+    max-width: 400px;
+    font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.mapboxgl-popup-content {
+    width: 340px;
+}
+.title{
+    color:#390
+}
+.icon-bar li{
+    padding: 5px;
+
+
+}
+.icon-bar li:hover{
+    cursor: pointer;
+    color: gray;
+
+}
+.icon-bar li i{
+
+    color:#390
+}
+.icon-bar li i:hover{
+
+    color: gray;
+}
+
+.icon-top i{
+    color:gray;
+}
+.icon-top li.active i{
+    color:#390
+}
+.icon-top i:hover{
+    color:gray;
+    cursor:pointer
+}

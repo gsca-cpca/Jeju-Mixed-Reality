@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Augmented Reality</title>
+    <script src="https://aframe.io/releases/1.0.3/aframe.min.js"></script>
+    <!-- include ar.js for A-Frame -->
+    <script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
+
+</head>
+<body style='margin : 0px; overflow: hidden;'>
+<a-scene  renderer='antialias: true; alpha: true; logarithmicDepthBuffer: true' arjs='debugUIEnabled: false; sourceType: webcam; maxDetectionRate: 30; detectionMode: mono_and_matrix; matrixCodeType: 4x4;' >
+    <a-assets>
+        <a-asset-item id="templar" src="assets/model/templar.glb"></a-asset-item>
+        <a-asset-item id="harubang" src="assets/model/Harubang.glb"></a-asset-item>
+    </a-assets>
+    <a-marker  type='pattern' url='data/pattern-harubang.patt'>
+<!--        <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>-->
+
+        <a-entity gltf-model="#harubang"  position="0 0.5 0"  ></a-entity>
+    </a-marker >
+
+    <a-marker  type='pattern' url='data/pattern-templar_marker.patt'>
+        <!--        <a-box position='0 0.5 0' material='opacity: 0.5;'></a-box>-->
+
+        <a-entity gltf-model="#templar" position="0 -2 0" scale="0.01 0.03 0.01"  ></a-entity>
+    </a-marker >
+</a-scene>
+</body>
+
+</html>
